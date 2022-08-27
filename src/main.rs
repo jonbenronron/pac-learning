@@ -47,20 +47,39 @@ fn main() {
 
     assert_eq!(data.len(), 10);
 
-    println!("{:#?}", data);
-
     let class: Class = Class::rnd();
+    println!(
+        "Testing hypothesis class x_limits: {:?}, y_limits: {:?}: \n",
+        class.x_limits.clone(),
+        class.y_limits.clone()
+    );
     for d in data {
-        let h = hypothesis(d, Class::rnd());
-        println!(
-            "Testing hypothesis: {:#?}",
-            h,
-        );
+        if d.r {
+            println!(
+                "for data point x: {}, y: {}, r: {}",
+                d.x[0].clone(),
+                d.x[1].clone(),
+                d.r.clone(),
+            );
+
+            let h = hypothesis(
+                d,
+                class.x_limits.clone(),
+                class.y_limits.clone()
+            );
+        
+            println!("result: {} \n", h);
+        }
+        
     }
 }
 
-fn hypothesis(x: Data, c: Class) -> bool {
-    let inside_x_limits = c.x_limits[0] < x.x[0] && x.x[0] < c.x_limits[1];
-    let inside_y_limits = c.y_limits[0] < x.x[1] && x.x[1] < c.x_limits[1];
+fn hypothesis(
+    x: Data,
+    hypothesis_x_limits: [f32; 2],
+    hypothesis_y_limits: [f32; 2],
+) -> bool {
+    let inside_x_limits = hypothesis_x_limits[0] < x.x[0] && x.x[0] < hypothesis_x_limits[1];
+    let inside_y_limits = hypothesis_y_limits[0] < x.x[1] && x.x[1] < hypothesis_y_limits[1];
     x.r && inside_x_limits && inside_y_limits
 }
